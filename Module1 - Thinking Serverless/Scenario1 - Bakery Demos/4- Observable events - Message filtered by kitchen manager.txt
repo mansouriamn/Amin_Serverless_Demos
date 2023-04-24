@@ -1,0 +1,65 @@
+			Observable events - Message filtered by kitchen manager
+
+
+Our kitchen manager will be an SNS topic that will send messages to our donut and pie chefs at
+the same time. Our chefs will be lambda functions waiting for an order.
+
+1- Create an SNS topic called kitchen manager.
+2- Create a python lambda function called Pie_Chef and paste the following as code.
+
+import json
+
+def lambda_handler(event, context):
+    message = event['Records'][0]['Sns']['Message']
+    if message.find("pie") !=-1:
+        print("Order: " + message + ". Pie will be ready soon!")
+    else:
+        print("Not a pie. Not interested")
+    
+    return {
+        'order': message
+    }
+
+
+3- Create a python lambda function called Donut_Chef and paste the following as code.
+
+import json
+
+def lambda_handler(event, context):
+    message = event['Records'][0]['Sns']['Message']
+    if message.find("donut") !=-1:
+        print("Order: " + message + ". Donut will be ready soon!")
+    else:
+        print("Not a donut. Not interested")
+    
+    return {
+        'order': message
+    }
+
+
+4- For both functions click "Add Trigger", select SNS and select the "Kitchen manager" topic.
+5- Open the "Kitchen Manager" topic and go to the "Subscriptions" tab
+6- Select the "Pie_Chef" subscription
+7- Under the "Subscription filter policy", paste the following. This will only send the message if the message says pie.
+
+{
+  "Message": [
+    "pie"
+  ]
+}
+
+8- Repeat the same process for the "Donut_Chef" and add the following policy
+
+{
+  "Message": [
+    "donut"
+  ]
+}
+
+9- Open "Kitchen_Manager" topic and click "Publish Message"
+
+10- In the "Message Attributes" section in the bottom select the following
+
+String --> Message --> donut
+or 
+String --> Message --> pie

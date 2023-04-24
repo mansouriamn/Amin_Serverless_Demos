@@ -1,0 +1,59 @@
+					AWS SAM Demo 2 (Using sam init)
+
+1- Create an EC2 instance 
+2- Install AWS Cli (If we used Amazon Linux2 it would already have AWS Cli)
+3- Run AWS configure 
+4- Install Docker
+*	sudo yum update -y
+*	sudo amazon-linux-extras install docker -y
+*	sudo service docker start
+*	sudo usermod -a -G docker ec2-user
+*	chkconfig docker on
+5- Install AWS SAM 
+*	wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
+*	unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+*	sudo ./sam-installation/install
+*	sam --version
+6- Install Python
+*	sudo yum install gcc openssl-devel bzip2-devel libffi-devel -y
+*	sudo wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz 
+*	sudo tar xzf Python-3.9.6.tgz 
+*	cd Python-3.9.6 
+*	sudo ./configure --enable-optimizations
+*	sudo make altinstall
+*	sudo rm -f /opt/Python-3.9.6.tgz 
+*	python3.9 -V 
+7- Create application template
+*	sam init
+*	Select "AWS Quickstart Templates"
+*	Select "Hello World Example"
+*	Use the most popular runtime and package type? (Python and zip) [y/N]: y
+*	Would you like to enable X-Ray tracing on the function(s) in your application?  [y/N]: y
+*	Project name: sam-app
+*	tree sam-app (Make sure the file app.py exists. if it doesn't create the file and place the following lambda code inside)
+
+import json
+
+def lambda_handler(event, context):
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+Note: Most important files are 
+1-	~/sam-app/hello_world/app.py
+2-	~/sam-app/hello_world/requirements.txt
+3-	~/sam-app/template.yaml
+
+8- Build the application
+*	cd sam-app
+*	sam build
+*	sam deploy --guided
+
+9- Test Application locally - Run the lambda function in a docker container
+*	sam local start-api - This command will start the application locally
+*	curl http://127.0.0.1:3000/hello - This will send a get request to the app
+
+10- Invoke lambda function locally - Run function in a local docker container
+*	sam local invoke

@@ -1,0 +1,53 @@
+			Step Functions Demo		
+
+
+In this demo we will create a step function that will flip a coin for us.
+
+1- Search for AWS Step Functions
+2- Click "State Machines" from the left bar
+3- Click "Create State Machine" 
+4- Select "Write your workflow in code"
+5- Select "Strandard" and paste the following ASL in the "Definition" box.
+
+
+{
+  "Comment": "A simple AWS Step Functions state machine that flips a coin.",
+  "StartAt": "CoinFlipping",
+  "States": {
+    "CoinFlipping": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.Side",
+          "StringEquals": "Heads",
+          "Next": "HeadsFunction"
+        },
+        {
+          "Variable": "$.Side",
+          "StringEquals": "Tails",
+          "Next": "TailsFunction"
+        }
+      ]
+    },
+    "HeadsFunction": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:511349353831:function:HeadsFunction",
+      "End": true
+    },
+    "TailsFunction": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:511349353831:function:TailsFunction",
+      "End": true
+    }
+  }
+}
+
+6- Click refresh to see the data flow on the right and click next
+7- Call this state machine coin flip
+8- Under permissions, add the role that was created in the beginning.
+9- Click "Create State Machine"
+10- Click "Start Execution" and use the following input with either Heads or Tails
+
+{
+  "Side": "Heads"
+}

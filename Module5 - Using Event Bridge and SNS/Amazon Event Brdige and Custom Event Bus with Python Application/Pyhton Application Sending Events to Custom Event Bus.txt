@@ -1,0 +1,61 @@
+			Python Application Sending Events to Custom Event Bus
+
+Create a python application that can read your name, lastname and company you work at
+and then send an event to custom event bus in Event Bridge. This event will be forwarded to a
+lambda function and the contents would be printed out.
+
+Create a pyhton application
+1- Create a pyhton application and call it myapp.py (Refer to the file in this folder)
+
+Create a lambda function:
+1- Create a python lambda function and call it "Register-User"
+2- Paste the following code in the code section
+
+import json
+
+def lambda_handler(event, context):
+    name = event["detail"]["name"]
+    lastname = event["detail"]["lastname"]
+    company = event["detail"]["company"]
+    
+    print(name, lastname, company)
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }
+
+This code will wait for an event that has a detail section and the values name, lastname and 
+company underneath.
+
+Create an event bus
+
+1- Create a custom event bus using the following steps
+2- Open event bridge --> Click event buses --> Click "Create Event Bus"
+3- Name the event bus "User-Registry" --> Enable Event Archive --> Enable Schema Discovery
+4- Hit create
+5- Click "Rules" on the left --> Select the "User-Registry" bus under "Event bus"
+6- Click "Create Rule"
+7- Name the rule 'New-registration-event' --> Select "Rule with an event pattern" and hit next
+8- Scroll to the bottom and select "Custom Patterns" and paste the following pattern then click next.
+
+{
+  "source": ["my-event"],
+  "detail-type": ["Send Event to Registration Service"]
+}
+
+9- As a target select AWS Service --> Lambda Function --> "Register-User" and click finish.
+
+
+Test Application
+
+1- Open python application and hit run
+2- Open lambda logs and you should see the logs in cloudwatch.
+
+This proves that the application genrated events and the events were sent to the custom event bus
+and the event was forwarded to the user registration lambda function.
+
+3- Scroll to the bottom of the page in event bridge and select Schemas.
+4- Under "Discovered Schema Registry" you will see the a new schema added that belongs to user
+registration
+
+ 

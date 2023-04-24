@@ -1,0 +1,20 @@
+				Lambda Environment Variables
+1- Create a lambda function
+
+import json
+import os
+
+def lambda_handler(event, context):
+    # TODO implement
+    print('variable1: ',os.environ['env1'])
+    print('variable2: ',os.environ['env2'])
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda version1!')
+    }
+
+2- Select the "Configuration" tab and select "Environment Variables"
+3- Click "Edit" and "add environment variable"
+4- For "Key" add "env1" and "Value" add "dev.database"
+5- Add second variable as "env2" and "prod.database" and click save
+6- Save and run function to see the environment variable values in the execution results

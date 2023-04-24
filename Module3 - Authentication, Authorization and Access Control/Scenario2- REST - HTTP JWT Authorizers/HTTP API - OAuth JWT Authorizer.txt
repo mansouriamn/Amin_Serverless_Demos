@@ -1,0 +1,1 @@
+API Gateway HTTP API JWT Authorizer (use Auth0 or any authentication provider that supports JWT) - https://www.youtube.com/watch?v=lrIwPL6JpeI 

@@ -1,0 +1,37 @@
+			AWS SAM Demo
+
+1- Create an EC2 instance 
+2- Install AWS Cli
+3- Run AWS configure --profile amin and provide key information
+4- Install Docker
+*	sudo yum update -y
+*	sudo amazon-linux-extras install docker -y
+*	sudo service docker start
+*	sudo usermod -a -G docker ec2-user
+5- Install AWS SAM 
+*	wget https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
+*	unzip aws-sam-cli-linux-x86_64.zip -d sam-installation
+*	sudo ./sam-installation/install
+*	sam --version
+6- Install git
+*	sudo yum install git -y
+7- Clone the application
+*	git clone https://github.com/beabetterdevv/sam-app
+8- Open the folder
+*	cd sam-app
+9- Install python
+*	sudo yum install -y amazon-linux-extras
+*	sudo amazon-linux-extras enable python3.8
+*	sudo yum install python3.8
+10- Build the sam template
+*	sam build
+11- Deploy template (At the authorization question answer y)
+*	sam deploy --guided	
+12- Open Lambda and click on API gateway
+13- Copy API endpoint and paste to browser address bar
+14- add ?personId=5 at the end, to see the output.
+15- Run inside terminal using the following command
+*	curl https://gtwdp1xszf.execute-api.us-west-2.amazonaws.com/Prod/helloWorld?personId=5
+
+
+ 

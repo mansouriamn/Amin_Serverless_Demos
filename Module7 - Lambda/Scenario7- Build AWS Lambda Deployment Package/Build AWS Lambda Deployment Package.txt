@@ -1,0 +1,55 @@
+			Build an AWS Deployment Package
+
+
+When building a Python application, we will be using many python libriaries. These 
+libraries are not present in Lambda and trying to import them directly will throw an error.
+
+We can add these libraries in our code as dependencies and then upload it as a zip file.
+
+To build a deployment package we must do the following
+
+1- Create an AWS Lambda Config
+2- Build the Deployment Package
+3- Schedule cron jobs with AWS Cloudwatch
+
+
+1- Create an AWS Lambda Config
+*	Open the management console
+*	Open lambda and hit create function
+*	Select Author from scratch and give it a name
+*	For runtime select Python 3.6 or 3.7
+*	Under permission select "Create a new role with basic lambda permissions" and hit "Create Function"
+
+2- Open Vscode and paste the following code
+import requests
+
+def lambda_function(event=None, context=None):
+    response = requests.get("https://www.yahoo.com")
+    if response.status_code == 200:
+        return "Yahoo query was successful"
+
+print(query())
+
+This will print it was successful
+
+3- Paste the same code in Lambda without the last print line
+
+import requests
+
+def lambda_function(event=None, context=None):
+    response = requests.get("https://www.yahoo.com")
+    if response.status_code == 200:
+        return "Yahoo query was successful"
+
+There will be an error message that there is no module called requests
+
+4- Now we will install the requests module in the application code 
+*	mkdir lambda_function
+*	copy lambda_fucntion.py lambda_function
+*	cd lambda_function
+*	pip install requests -t . --no-user
+
+5- Create a zip file by right clicking on all files and send to compressed zip. (Do not zip the folder)
+6- Open Lambda and upload the zip file
+7- In the runtime settings section add handler information in the following format.
+*	filename.handler-name

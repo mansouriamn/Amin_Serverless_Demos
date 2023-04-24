@@ -1,0 +1,12 @@
+					SQS to Lambda
+
+The following example uses the AWS CLI to map a function named my-function to an Amazon SQS 
+queue that is specified by its Amazon Resource Name (ARN), with a batch size of 5 and a batch
+window of 60 seconds.
+
+aws lambda create-event-source-mapping --function-name my-function --batch-size 5 \
+--maximum-batching-window-in-seconds 60 \
+--event-source-arn arn:aws:sqs:us-east-2:123456789012:my-queue
+
+
+Ref: https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html

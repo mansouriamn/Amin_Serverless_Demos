@@ -1,0 +1,17 @@
+				API Gateway Service Proxy Explained
+
+
+Looking at the diagram below we can see that a client is sending a request to the API Gateway.
+The API Gateway is forwarding the request to the lambda function and from there the request will
+be forwarded to dynamodb
+
+Client ----> API Gateway ----> Lambda Function ----> DynamoDb
+
+API gateway service proxy can send the request directly from API Gateway to DynamoDB after
+removing the lambda function. This will reduce costs and decrease the latency since we're not
+invoking a lambda function in the middle of this process.
+
+Client ----> API Gateway ----> DynamoDb
+
+
+

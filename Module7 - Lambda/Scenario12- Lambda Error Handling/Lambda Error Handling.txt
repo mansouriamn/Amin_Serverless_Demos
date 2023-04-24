@@ -1,0 +1,7 @@
+			Lambda Error Handling
+
+Invoking a lambda Function can invoke two types of errors
+
+1- Invocation Errors
+2- Function Errors
+

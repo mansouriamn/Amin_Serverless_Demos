@@ -1,0 +1,16 @@
+				Graphql vs REST API
+
+Let's imagine we have a database of authors and their books. Authors have 10 attributes and so
+do books. every author might have many books. If we want to get a list of authors that will also
+include the name of each book, this is what will happen in a REST API.
+
+First we have to send a request to get a list of authors. Although we just want the name of the
+authors, we will receive the name plus all of the attributes of the authors. Then we will have to
+filter the author names and send another request to the API, this time asking for all the books
+the author has. Although we just need the name of the books, we will receive the name and all
+of the attributes of the books as well and we will have to filter to get just the book names.
+If we have 5 authors, this means we will have to send 5 requests to get information for each 
+author.
+
+With GraphQL we specify that we want the author's name and book title and that's exactly what 
+we will get after sending the request.

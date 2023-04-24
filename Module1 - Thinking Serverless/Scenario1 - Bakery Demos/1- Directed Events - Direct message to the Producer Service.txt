@@ -1,0 +1,40 @@
+			Directed Events - Direct message to donut chef
+
+
+
+This demo will demonstrate how a directed message works in lambda
+
+1- Create a python lambda function and call it "Producer/Order Service"
+2- Paste the following code in the code section.
+
+import json
+
+def lambda_handler(event, context):
+    message = event['Order']
+    
+    return {
+        'Order': message,
+        'Cashier': 'Preparing the bill at this moment',
+        'Baker': 'Order will be ready in a few minutes.'
+    }
+
+3- Create a test and paste the following test.
+
+{
+   "Order": "10 donuts"
+}
+
+4- Run the test.
+5- Adding a new consumer means updating the "Producer/Order Service"
+
+import json
+
+def lambda_handler(event, context):
+    message = event['Order']
+    
+    return {
+        'Order': message,
+        'Cashier': 'Preparing the bill at this moment',
+        'Baker': 'Order will be ready in a few minutes.',
+        'Inventory': 'New products availaable in warehouse'
+    }

@@ -1,0 +1,60 @@
+				Why Use Lambda
+
+Lambda is an event-driven compute service. We use lambda for event based programming.
+Lambda can run our code in response to the following events:
+
+1- Events from AWS services
+2- Https requests using amazon API gateway
+3- API calls using AWS SDKs
+
+Lambda has a handler function that runs everytime an event occurs.
+
+
+
+Lambda code can use runtimes. Runtimes are responsible for the following
+----------------------------------------
+1- Running the function's setup code
+2- Reading the handler name from an environment variable
+3- Reading invocation events from the Lambda runtime API
+4- Passing the event data to the function handler
+5- Posting the response from the handler back to Lambda 
+
+Lambda also uses layers that are good for sharing code or using custom runtimes. Lambda
+also has a concept called extensions, that allow it to easily integrate in monitoring,
+security and governenace applications.
+
+Lambda needs permission to communicate with other services and other services need permission
+to send events to lamda.
+
+
+Methods of invoking lambda
+---------------------------
+
+1- Asynchronous:
+This is when an event triggers lambda and the event is sent to a queue or message bus
+waiting for a lambda function to process it. We can configure retries on errors.
+*	Amazon event bridge is a message bus
+*	Amazon SQS is a message queue
+
+2- Sysnchronous: 
+This is when the event triggers lambda without delay. Lambda runs the function and waits
+for a response. This methos does not have built in retries. Amazon cognito, API Gateway and
+SDKs can all trigger lambda synchronously
+
+3- Poll based
+Streams or queues don't normally trigger a fucntion. Lambda pools the service, retrieves 
+matching events, and invokes the function.
+
+
+Types of permissions
+--------------------
+Invocation Permissions:
+Permissions that the event source needs to communicate with Lambda.
+
+Processing Permissions:
+Permissions that Lambda needs to access your resources.
+
+
+
+
+

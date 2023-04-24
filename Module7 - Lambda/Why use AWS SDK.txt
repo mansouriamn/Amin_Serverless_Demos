@@ -1,0 +1,8 @@
+
+
+For example a serverless application cosntantly throwing errors. DynamoDB logs show ProvisionedThroughputExceededException error messages.
+If we use AWS SDK's, it will implements retry logic automatically and also implements an Exponential Backoff Algorithm for better flow control.
+The concept of exponential backoff algorithm means that we will use longer waits between retries for consecutive error responses.
+If after a minute the retries don't succeed, the problem might be the provision throughput not
+the request rate. Set the maximum number of retries to stop around one minute. If the request was not
+successful investigate the provisioned through put.

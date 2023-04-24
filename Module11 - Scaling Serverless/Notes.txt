@@ -1,0 +1,11 @@
+one benefit of serverless applications is the ability to update one service or component without
+affecting other services or components. But if we scale one service, how would it affect other
+services? These services all have different quotas that might affect each other. 
+
+As our solutions evolve and usage patterns become clearer, we will optimize cost and 
+performance over time, we will find how to scale the best way that supports our workloads 
+instead of trying to scale infinitely on all components.
+
+API Gateway prevents DDOS attacks against my serverless application? (Module10: Security)
+
+ 

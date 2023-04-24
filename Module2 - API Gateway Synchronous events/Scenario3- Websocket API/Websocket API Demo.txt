@@ -1,0 +1,150 @@
+				Websocket API Demo
+
+Create IAM role for Lambda fucntions
+---------------------------
+1- Open IAM
+2- Create Role called WebSocketResponseRole
+3- Add policy AmazonAPIGatewayInvokeFullAccess and AWSLambdaBasicExecutionRole and CloudWatchLogsFullAccess
+
+
+
+Create Lambda Functions
+---------------------------
+1- Create a lambda function called "connect", using the role created above and paste
+the following code. This function will run when a client connects to our websocket API.
+If we don't return a status code of 200, we will recieve errors.
+
+import json
+
+def lambda_handler(event, context):
+    print(event)
+    print("****")
+    print(context)
+    return { "statusCode": 200  }
+
+2- Create a fucntion and call it "disconnect" with the same code as above.
+
+3- Create a fucntion called "SendMessage". In this function place your Connection 
+URL in the endpoint_url section. This fucntion will extract your connectionid
+and respond with the message "responding...". Note: The following connection url "https://hdutu6cyz3.execute-api.us-east-2.amazonaws.com/production/@connections"
+has to be trimmed to "https://hdutu6cyz3.execute-api.us-east-2.amazonaws.com/production" to work successfully.
+
+import json
+import urllib3
+import boto3
+
+client = boto3.client('apigatewaymanagementapi', endpoint_url="xxxxxxxxxx.com/production")
+
+def lambda_handler(event, context):
+    print(event)
+    
+    #Extract connectionId from incoming event
+    connectionId = event["requestContext"]["connectionId"]
+    
+    #Do something interesting... 
+    responseMessage = "responding..."
+    
+    #Form response and post back to connectionId
+    response = client.post_to_connection(ConnectionId=connectionId, Data=json.dumps(responseMessage).encode('utf-8'))
+    return { "statusCode": 200  }
+
+
+4- Create a function called "Broadcast" that will be used to send a message from our websocket API called $default to a specific connection. 
+Use the following code. Note: The following connection url "https://hdutu6cyz3.execute-api.us-east-2.amazonaws.com/production/@connections"
+has to be trimmed to "https://hdutu6cyz3.execute-api.us-east-2.amazonaws.com/production" to work successfully.
+
+import json
+import urllib3
+import boto3
+
+client = boto3.client('apigatewaymanagementapi', endpoint_url="xxxxxx.com/production")
+
+def lambda_handler(event, context):
+    
+    #Extract connectionId and desired message to send from input
+    connectionId = event["connectionId"]
+    message = event["message"]
+    
+    #Form response and post back to provided connectionId
+    response = client.post_to_connection(ConnectionId=connectionId, Data=json.dumps(message).encode('utf-8'))
+    print(response)
+    
+
+
+Create API Gateway Websocket Endpoint
+---------------------------
+1- Open API Gateway
+2- In the "Websocket API", box click "Build"
+3- Give the API a name "Cool Websocket API"
+
+There is a box called "Route Selection Expression" in this page that tells the API Gateway
+which route to call when a client sends a message. The keyword action will be pointing to a
+route that will be created in the API.
+
+4- Enter the default value of "request.body.action" in the "Route Seelction Expression" section.
+
+In the Add routes page we can see "$connect" route, that will trigger an action when someone connects
+to the API, and a "$disconnect" route that will trigger an action when someone disconnects, and $default
+when the message sent doesn't correspond to a known route. In the bottom we can create a custom route
+that will trigger if the action sent from the client matches the route.
+
+5- Click on "Add $connect route", "Add $disconnect route", "Add $default route" to enable these routes for
+your API gateway
+
+6- Create your custom route by clicking on "Add custom route". In the "route key" box type "sendMessage".
+
+Tip: The value of "sendMessage" can be any value we want to use for our route.
+
+7- In the "Attach Integrations for $connect" section, select lambda for "Integration type" and the select the 
+lambda function named "Connect"
+
+8- In the "Attach Integrations for $disconnect" section, select lambda for "Integration type" and the select the 
+lambda function named "disconnect"
+
+9- Do the same thing for default and sendmessage routes and click next
+
+10- Specify the stage you want to deploy this to. Add stage named production and click next.
+
+11- Click "Create and Deploy"
+
+Now let's get the websocket endpoint the API gateway created for us and try to connect to the endpoint
+
+12- On the left click on stages and then select "Production". This will show us the websocket URL and the connection URL.
+
+Front end client will use the "Websocket URL" to connect to the websocket API Gateway.
+To post messages from the backend to the frontend, we must use "connection URL's".
+To connect to websocket we can't use postman and have to use a websocket tester that can send and recieve messages from websockets
+Our tool is called "Pie Socket" that we can use using the https://www.piesocket.com/websocket-tester  url
+
+13- Paste the websocket url in the box and click "Send"
+
+This will trigger the connect lambda function and thus save the logs in cloudwatch
+
+14- Open cloudwatch and under "logs", select "log groups" and select /aws/lambda/connect 
+log group. You should see the event, followed by "*******", followed by "Context". One
+Important piece of information in the event is "connectionId" that can be used to reply
+to the request.
+
+Now let's send a message to our websocket and see if we get a response back from our websocket router
+
+15- Open https://www.piesocket.com/websocket-tester and paste the following message and hit send
+{"action":"sendMessage", "message": "Hello from client to websocket"}
+
+This message will be sent from the piesocket client to our websocket API and to the route called "sendMessage".
+This will trigger the SendMessage lambda function and return a message showing "Responding..." message from the websocket API.
+
+16- Send a broadcast message from the websocket to a connection. Grab the connectionId from the cloudwatch logs.
+
+17- Open the "Braodcast" Lambda function
+
+18- Paste the connection URL to the "endpoint_url=" section
+
+19- Create a test and use the following in the test body
+
+{
+	"connectionId": "paste connection id here",
+	"message": "This is a message from the websocket backend to the client"
+}
+
+20- Run the test and go back to pie socket to see if you recieved a message.
+

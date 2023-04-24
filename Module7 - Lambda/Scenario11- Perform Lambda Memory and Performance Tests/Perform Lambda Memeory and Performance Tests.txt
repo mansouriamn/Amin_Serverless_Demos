@@ -1,0 +1,8 @@
+		Perform Lambda Memeory and Performance Tests
+
+Perform tests using one of the following
+
+1- Management Console
+2- AWS Cli
+3- AWS SAM
+4- SDKs

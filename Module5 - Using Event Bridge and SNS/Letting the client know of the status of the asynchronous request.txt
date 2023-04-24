@@ -1,0 +1,20 @@
+In asynchronous communications, it’s important that the client has a way to know when the 
+downstream task is done so that it can complete the next steps. In the diner example, how does
+the customer or waiter know that their order is ready? 
+
+There are three ways this typically could happen:
+The customer checks for their order at the bakery counter every few minutes.
+The bakery gives the customer a device that vibrates when their order is ready, and the 
+customer then collects their order.
+The customer receives a number to put on their table, and the waiter brings the customer’s 
+order to them when it’s ready.
+
+These equate to roughly three options for getting status to your client:
+The client polls for the status of the event.
+The client uses a webhook to get notified when the event is complete.
+The client uses WebSockets to open a two-way connection so that the results of the process can
+be delivered directly to the client. 
+
+The OCS provides detailed examples of how you might implement these patterns in a serverless 
+application. 
+

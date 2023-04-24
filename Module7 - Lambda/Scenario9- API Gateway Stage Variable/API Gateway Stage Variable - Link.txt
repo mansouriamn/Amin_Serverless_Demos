@@ -1,0 +1,1 @@
+https://aws.amazon.com/blogs/compute/using-api-gateway-stage-variables-to-manage-lambda-functions/

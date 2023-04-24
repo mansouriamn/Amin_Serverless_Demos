@@ -1,0 +1,39 @@
+			Best practices for building modern serverless applications
+
+1- Run the serverless application in the cloud:
+	Cloud can abstract the backend infrastructure for the serverless application
+
+2- Serverless apps can scale, update, deploy and incorporate reversible changes independantly
+	without impacting other elements in the system.
+
+3- To integrate microservices, use integration services like sqs, sns, eventbridge, kinises and etc 
+
+4- Use infrastructure as code to deploy infrastructure for your application
+
+5- Serverless apps are built around the business logic of the business
+
+6- Serverless apps might have several purpose built data stores for each service
+
+7- Serverless apps can connect their services using synchronous and asynchronous methods to 
+	achieve decoupling 
+
+
+			Challenges for adopting serverless best practices
+
+
+1- Organizational structure:
+	For many organizations, it means changing how you think about your code, structure your
+	teams, deploy your software, and operationalize your applications.
+
+2- Service and data store boundries:
+*	Building well-architected serverless applications: Managing application security boundaries – part 1
+	https://aws.amazon.com/blogs/compute/building-well-architected-serverless-applications-managing-application-security-boundaries-part-1/
+
+*	Building well-architected serverless applications: Managing application security boundaries – part 2
+	https://aws.amazon.com/blogs/compute/building-well-architected-serverless-applications-managing-application-security-boundaries-part-2/
+
+3- Managing distributed data and their transactions
+
+4- Many moving pieces and deployments
+
+5- Monitoring and troubleshooting distributed applications    

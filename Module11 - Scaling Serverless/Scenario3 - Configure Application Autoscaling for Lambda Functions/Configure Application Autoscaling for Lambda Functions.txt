@@ -1,0 +1,33 @@
+			Autoscaling lambda Provisioned Concurrency
+
+We can use AWS Application Auto Scaling to schedule the provisioned concurrency increase in 
+advance of your traffic peak and then reduce it at a scheduled time when you expect the peak 
+has passed.
+
+We can also use target tracking to scale the function based on a metric and target value that
+is defined. This will create cloudwatch alarms that will trigger whenever threshold is met.
+
+To increase provisioned concurrency automatically as needed, use the RegisterScalableTarget 
+and PutScalingPolicy Application Auto Scaling API operations to register a target and create a
+scaling policy:
+
+1. Register a function's alias as a scaling target.
+aws application-autoscaling register-scalable-target --service-namespace lambda \
+                        --resource-id <function:my-function:BLUE> --min-capacity 1 --max-capacity 100 \
+                        --scalable-dimension lambda:function:ProvisionedConcurrency
+
+2.Apply a scaling policy to the target. (e.g. keep utilization near 70 percent.)
+aws application-autoscaling put-scaling-policy --service-namespace lambda \
+                        --scalable-dimension lambda:function:ProvisionedConcurrency --resource-id function:my-function:BLUE \
+                        --policy-name my-policy --policy-type TargetTrackingScaling \
+                        --target-tracking-scaling-policy-configuration '{ "TargetValue": 0.7, "PredefinedMetricSpecification": { "PredefinedMetricType": "LambdaProvisionedConcurrencyUtilization" }}'
+
+
+Note: Application Auto Scaling creates two alarms in CloudWatch. The first alarm triggers when
+the utilization of provisioned concurrency consistently exceeds 70 percent. When this happens,
+Application Auto Scaling allocates more provisioned concurrency to reduce utilization. The 
+second alarm triggers when utilization is consistently less than 63 percent (90 percent of the
+70 percent target). When this happens, Application Auto Scaling reduces the alias's 
+provisioned concurrency.
+
+https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html

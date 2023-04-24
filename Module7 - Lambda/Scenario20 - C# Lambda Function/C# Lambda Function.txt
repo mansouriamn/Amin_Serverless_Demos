@@ -1,0 +1,83 @@
+			Create Lambda Function in C#
+
+1- Open Visual studio
+2- Click "Create Project" and search for lambda
+3- Select "AWS Lambda projects with Tests (.Net core - C#)"
+4- Select "Empty Function"
+5- Right click on yuour function --> click add --> class
+6- Call this class student
+7- Double click your function and test to see all 3 tabs in the middle pane
+8- Define a name and email property for the student class
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AWSLambda1
+{
+    internal class student
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+    }
+}
+
+9- Open the main lambda function and pass the object of type student to the input
+
+using Amazon.Lambda.Core;
+
+// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+
+namespace AWSLambda1;
+
+public class Function
+{
+    
+    /// <summary>
+    /// A simple function that takes a string and does a ToUpper
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    public string FunctionHandler(student student, ILambdaContext context)
+    {
+        return $"Name: {student.Name}, Email: {student.Email}";
+    }
+}
+
+10- Now let's configure our test by creating an object from type "student" and passing it into the test
+
+public class FunctionTest
+{
+    [Fact]
+    public void TestToUpperFunction()
+    {
+
+        // Invoke the lambda function and confirm the string was upper cased.
+        var function = new Function();
+        var context = new TestLambdaContext();
+        Student student = new Student
+        {
+            Email = "Jbourne@yahoo.com",
+            Name = "Jason Bourne"
+        }; 
+            
+        var result = function.FunctionHandler(student, context);
+
+        Assert.Equal($"Name: {student.Name}, Email: {student.Email}",result);
+    }
+}
+
+11- Open the function test, right click and click "Run Test". Make sure the test passes.
+12- Right click on your main function and click "Publish to AWS Lambda"
+13- Provide function name and click "Next"
+14- Provide Role name and click upload
+15- After upload is complete put in json values like below and invoke the function
+{
+"Name": "Jason",
+"Email": "Test@test.com"
+}
+

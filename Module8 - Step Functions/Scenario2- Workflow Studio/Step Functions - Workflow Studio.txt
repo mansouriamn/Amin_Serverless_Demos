@@ -1,0 +1,13 @@
+			Step Fucntions - Workflow Studio
+
+
+1- Open "Step Functions" and select "Design your workflow visually"
+2- Start by dragging a lambda function to the screen. 
+3- Call the function "Flip", and select the Flip function from the list
+4- Select the flow tab and add a choice to the list
+5- Add two functions under choice.
+6- Call one fucntion "HeadsFunction" and add the HeadsFucntion lambda
+7- Call the second fucntion "TailsFunction" and add the TailssFucntion lambda
+8- Click on Choice and set the rules for both fucntions as follows
+$.Side -- Is equals -- String constant -- "Heads"
+$.Side -- Is equals -- String constant -- "Tails"

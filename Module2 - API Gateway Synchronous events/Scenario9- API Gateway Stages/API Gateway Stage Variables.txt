@@ -1,0 +1,44 @@
+			API Gateway Stage Variables
+
+
+Stage variables act like environment variables and can be used to change the behavior of your 
+API Gateway methods for each deployment stage; for example, making it possible to reach a 
+different back end depending on which stage the API is running on.
+
+
+1- Create an API Gateway
+*	Open API Gateway
+*	Click "Build" Rest API
+*	Create New API and call it "Hello World API" and click "Create API"
+*	Click "Actions", then "Create Method", then click "Get" and click check mark
+*	Select HTTP integration type and paste "http://${stageVariables.url}" in the "Endpoint URL" box and hit save.
+*	Select "Get" method, click "Actions" and select "Deploy API"
+*	Click "New Stage" and place "Dev" as name and hit deploy
+
+Note: The value "http://${stageVariables.url}" means that api gateway will look for a variable called "url" and use its value
+in front of "http://". 
+
+Note: After hitting deploy method, the url will return "Internal server error" since there is no value defined in stage variable.
+
+2- Create Stage variables
+*	Select the Dev stage
+*	Select the Stage Variables tab
+*	Click Add stage variable
+*	Enter "url" in the "Name" box and enter "example.com" in the value box and click check mark
+*	Select the "Get" method and click the "Actions" menu
+*	Click "Deploy API" and select "Dev" asthe stage and click "Deploy"
+*	Now the "https://fj911qxpa4.execute-api.us-east-2.amazonaws.com/Dev" will connect you to the example.com page
+
+3- Create second stage variable
+*	Click "Stages" from the left and hit the "Create" button
+*	Provide Stage name "Prod", select the last deployment and hit create.
+*	Click the "Stage Variables" tab and click "Add Stage Variable"
+*	In the "Name" box place "url", and in the "Value" box place "neverssl.com"
+*	Click "Resources", select the "Get" method click "Actions", select "DeployAPI", select "Prod" and hit "Deploy"
+
+Now the Prod link connects to one URL while the Dev link connects to another URL while both are still using the same API Gateway.
+
+Note: If we want to use different stage variable for lambda functions Aliases, we can use the following when creating API gateway and Lambda functions
+Considering the name of our lambda function is Helloworld.
+
+Helloworld:${stageVariables:lambdaAlias}

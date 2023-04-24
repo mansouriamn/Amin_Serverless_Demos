@@ -1,0 +1,133 @@
+			REST API with Service Proxy 
+
+When using a service proxy, there is no need for an intermediate lambda function accepting
+requests from the API Gateway. The API Gateway is able to forward the request directly to
+the endpoint service (e.g. DynamoDB, S3, SNS, SQS). This will reduce cost since no function
+is running and it will improve performance. This us beneficial if you don't have any processing.
+If you have processing you'll need to add lambda in between.
+
+
+Simple REST API:  Client Request --> API Gateway --> Lambda Function --> Service Endpoint
+Service Proxy:    Client Request --> API Gateway --> Service Endpoint
+
+One other possibility is setting up reuest and response like the following
+
+Unsecure Method: Client Request --> Service Endpoint
+This method requires adding your AWS credentials in your browser that is not secure.
+
+
+---------------------
+Demo 
+We will be setting up the following with DynamoDB as the service Endpoint
+Service Proxy:    Client Request --> API Gateway --> Service Endpoint
+
+
+Create an IAM role that allows putitem to dynamodb
+-----------------------------
+1- Open IAM and click create role
+2- Select Dynamodb
+3- Under "Select your use case", pick the first option "Amazon Dynamodb Accelerator(DAX) - Dynaodb Access"
+4- Click next and accept the default permissions. Provide a role name and create a role.
+
+Allow apigateway to assume the newly created role by following the steps below
+
+1- Open the role and enter the "Trust Relationships" tab and click "Edit trust relationship" button.
+2- in the section that says "Service": "dax.amazonaws.com", replace with "apigateway.amazonaws.com" 
+3- Click Update trust policy
+4- Copy the role arn and use it in the following
+
+
+
+Create Dynamodb table and API gateway to access it
+-----------------------------
+1- Create a DynamoDB table:
+*	Call table customers
+*	PK is called "customerId"
+*	SK is called "date"
+
+2- Create the APi for API Gateway
+*	Open API gateway
+*	Select "REST API" as the API type and click build
+*	Create "New API" called "Customers API"
+*	Endpoint type select "Regional" and create API
+
+3- Create a Resource
+*	Right click on the "/" and click create resource
+*	For resource name put "customers" and click create resource
+
+4- Create API
+*	Select "customers"
+*	Click on "Action" and select "Create Method"
+*	Under the dropdown select "Post" and click on the checkmark
+*	For integration type select "AWS Service"
+*	Select a region
+*	Select "dynamodb" for AWS Service
+*	For "HTTP Method" select "Post" (Look at dynamoDB documentation to see which method must be used to put items in the database. In this case it's post)
+*	For Action place "PutItem"
+*	For execution role create a role that has permission to put items and place the arn here. The role was created in the top.
+*	Click the Actions button and under "API Actions" select "Deploy API"
+*	Select new stage and call it "Test" and hit deploy and click save changes
+*	On the top we can see a URL that can be invoked
+
+5- Open Postman to create a post request and place the url 
+*	Make sure you add /customers at the end of the invoke url
+*	Select the "Body" tab and click raw
+*	Paste your json request to the body like below
+{
+	"TableName": "customers",
+	"Item": {
+		"customerId": {
+			"S": "1"
+			},
+		"date": {
+			"S": "2020"
+			},
+		"name": {
+			"S": "John Doe"
+			}	
+		}
+}
+*	click "Send". This will add a user to your database
+
+
+Transform client requests by creating mapping templates
+
+1- Open API gateway
+2- Click on the POST method that was created. 
+3- Click on "Integration Request"
+4- Scroll to the bottom and select "Mapping Templates"
+5- Click "Add mapping Template"
+6- Under "Content-Type", put "application/json" and click the checkmark and click yes
+7- Under generate template, paste the json that automatically gives dynamodb a customerid and accepts date and name and click save.
+{
+	"TableName": "customers",
+	"Item": {
+		"customerId": {
+			"S": "$context.requestId"
+			},
+		"date": {
+			"S": "$input.path('$.date')"
+			},
+		"name": {
+			"S": "$input.path('$.name')"
+			}	
+		}
+}
+
+8- Redeploy API. Click on Post and from the Actions button select "Deploy API"
+9- Open Postman. Select Post and in the box paste the invocation url with the /customers extension.
+10- Select "raw". In front of "raw", select "application/json".
+11- Paste the following json as a request.
+{
+	"date": "2020",
+	"name": "Jane Doe"
+}
+12- Check Dynamodb and make sure new items have been added.
+
+
+
+
+
+
+
+

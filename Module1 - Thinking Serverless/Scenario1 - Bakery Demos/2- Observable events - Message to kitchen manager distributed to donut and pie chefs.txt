@@ -1,0 +1,50 @@
+   Observable events - Message to kitchen manager distributed to donut and pie chefs
+
+
+Our kitchen manager will be an SNS topic that will send messages to our donut and pie chefs at
+the same time. Our chefs will be lambda functions waiting for an order.
+
+1- Create an SNS topic called kitchen manager.
+2- Create a python lambda function called Pie_Chef and paste the following as code.
+
+import json
+
+def lambda_handler(event, context):
+    message = event['Records'][0]['Sns']['Message']
+    print("Order " + message + " will be ready soon!")
+        
+    return {
+        'order': message
+    }
+
+3- Create a python lambda function called Donut_Chef and paste the following as code.
+
+import json
+
+def lambda_handler(event, context):
+    message = event['Records'][0]['Sns']['Message']
+    print("Order " + message + " will be ready soon!")
+        
+    return {
+        'order': message
+    }
+
+
+4- For both functions click "Add Trigger", select SNS ans select the "Kitchen manager" topic.
+5- Open the "Kitchen Manager" topic and send the following message.
+
+10 pie
+or
+10 donut
+
+Note: To test the functions, place a message in the following format in the test section
+
+{
+  "Records": [
+     {
+         "Sns":{
+             "Message": "10 donuts"
+         }
+     } 
+ ]
+}

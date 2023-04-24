@@ -1,0 +1,27 @@
+				HTTP API Method
+
+Demo
+In this demo we will create an HTTP API first. Then we will create a route
+that will accespt "Get" requests for a route called "/yahoo" and then trigger
+a lambda function that will query "www.yahoo.com" and if successful, it will return
+a message that says "Yahoo query was successful".
+ 
+1- Open API Gateway
+2- Click Create API
+3- In the HTTP API box click "build"
+4- Provide an API name "Query-Website"
+5- On the "Configure Routes" page click "Next"
+6- On the "Configure Stages" page click next
+7- On the "Review and Create" page click "Create"
+8- On the left click "Routes" and then hit "Create"
+9- In the first box click "Get"
+10- In the second box place "/yahoo" and hit "create"
+11- Click on "Get", under "/yahoo" to see a new pane on the right
+12- Click "attach intergration" and then "Create and attach an integration"
+13- Under "Integration Target", select "Lambda Function"
+14- Under "Integration Details", pick your lambda function called "Query-Function" and click "Create"
+15- Go back to the "API Gateway" page and click on "Query-Website"
+16- Copy the invoke url and paste to browser, at the end of the url add our method called "/yahoo" and hit enter
+17- This should invoke the lambda function and return "Yahoo query was successful"
+15- 
+

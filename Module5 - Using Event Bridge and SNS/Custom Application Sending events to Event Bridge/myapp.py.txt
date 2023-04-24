@@ -1,0 +1,8 @@
+import boto3
+
+client = boto3.client('events')
+
+{
+  "source": ["user-registration"],
+  "detail-type": ["user-registered"]
+}

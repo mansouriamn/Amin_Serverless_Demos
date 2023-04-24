@@ -1,0 +1,41 @@
+			Create Functions for Step function
+
+1- Create a Python function called Flip, that will randomly select either "Heads" or "Tails"
+
+import json
+import random
+
+def flip(event, context):
+    letters = ['Heads', 'Tails']
+    random_index = random.randint(0,len(letters)-1)
+    result = letters[random_index]
+    return {
+        'Side': json.dumps(result)
+    }
+
+
+Note:For role just create a role when creating the function.
+Note: After creating the function scroll down to runtime settings,
+click edit and change handler to lambda_function.flip. Run test and it will show heads or tails
+
+2- Create a function called "HeadsFunction"
+import json
+
+def lambda_handler(event, context):
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Heads')
+    }
+
+3- Create a Function called "TailsFucntion"
+
+import json
+
+def lambda_handler(event, context):
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Tails')
+    }
+

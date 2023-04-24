@@ -1,0 +1,11 @@
+				Amazon Cognito
+
+1- Open Cognito
+2- Click Manage User pools
+3- Click "Create User Pool" and call it "App1" and click "Review Defaults"
+4- Click Create Pool
+5- Click on "App Client" 
+6- Click "Add an App client" and click "Create App Client"
+7- Click on "App Integrations" to see how this app will integrate with the user pool.
+8- Enable the "Cognito User Pool" by check marking iy
+

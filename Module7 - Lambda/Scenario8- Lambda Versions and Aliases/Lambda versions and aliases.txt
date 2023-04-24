@@ -1,0 +1,10 @@
+			Lambda versions and aliases and Canary release
+
+
+1- Publish new version of a Lambda function:
+*	aws lambda publish-version --function-name my-function
+
+2- Create alias for the lambda function:
+*	aws lambda create-alias --function-name my-function --name alias-name --function-version version-number --description " "
+
+https://www.youtube.com/watch?v=qHbFyuzyuIw

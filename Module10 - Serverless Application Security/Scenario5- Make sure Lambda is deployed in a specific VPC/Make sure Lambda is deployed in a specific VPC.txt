@@ -1,0 +1,15 @@
+
+			Make sure Lambda is deployed in a specific VPC
+
+
+With condition keys, you can:
+Prevent function deployments in your account if they are not configured with your private VPC
+Prevent Lambda functions from being created without specific subnets and security groups specified in the VPC configuration
+
+
+Documentation: https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html#vpc-conditions
+Blog post: https://aws.amazon.com/blogs/compute/using-aws-lambda-iam-condition-keys-for-vpc-settings/
+
+
+
+

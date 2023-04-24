@@ -1,0 +1,41 @@
+			SNS messages to Slack webhooks
+
+If we want to send SNS notifications to Slack, Microsoft teams, chime or other messaging
+applications we can do so by forwarding SNS messages to the applications webhooks.
+
+Applications like slack or Microsoft teams can accept messages using webhooks. We 
+need to enable webhooks in these applications first. To enable webhooks in slack 
+visit https://api.slack.com/incoming-webhooks. Now our slack application is ready
+to accept requests. These applications only accept JSON messages but unfortunately
+SNS can't send JSON messages. So for this reason we will have to send our message to
+a lambda function first. The function will accept the message from SNS and convert it 
+into JSON and send it to Slack. 
+
+Create a lambda function and place the following code in the fucntion for this purpose.
+
+#!/usr/bin/python3.6
+import urllib3 
+import json
+http = urllib3.PoolManager() 
+def lambda_handler(event, context): 
+    url = "https://hooks.chime.aws/incomingwebhooks/xxxxxxx"
+    msg = {
+        "Content": event['Records'][0]['Sns']['Message']
+    }
+    encoded_msg = json.dumps(msg).encode('utf-8')
+    resp = http.request('POST',url, body=encoded_msg)
+    print({
+        "message": event['Records'][0]['Sns']['Message'], 
+        "status_code": resp.status, 
+        "response": resp.data
+    })
+
+Replace the value in front of "url" with webhooks url of your slack application. Read the sns
+message and save it in the "msg" variable. Encode the json message "encoded_msg". Send your 
+http request. If you get a 200 response this means your message was sent successfully. 
+
+
+
+Ref: https://youtu.be/fVL3rkSrMHs
+Ref: https://aws.amazon.com/premiumsupport/knowledge-center/sns-lambda-webhooks-chime-slack-teams/
+

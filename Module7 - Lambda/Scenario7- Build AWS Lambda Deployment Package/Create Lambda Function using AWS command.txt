@@ -1,0 +1,2 @@
+aws lambda create-function --function-name query-function --handler lambda_function.lambda_handler --runtime python3.8 --role arn:aws:iam::511349353831:role/service-role/query-yahoo-role-i09972iq --zip-file 
+fileb://lambda_function.zip

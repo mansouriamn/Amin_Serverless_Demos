@@ -1,0 +1,17 @@
+			Setup node js on amazon linux 2
+
+
+1- curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+
+2- . ~/.nvm/nvm.sh
+
+3- nvm install --lts
+
+4- Test to see if it's installed
+node -e "console.log('Running Node.js ' + process.version)"
+
+5- Install Amplify
+npm install -g @aws-amplify/cli
+
+Ref:https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html
+Ref: https://docs.amplify.aws/cli/start/install/

@@ -1,0 +1,27 @@
+				Lambda and SSM Parameter Store
+
+
+1- Create a python hello-world lambda function.
+2- Click the "Configuration" tab, click permissions and click on the role that was created
+ with the function.
+3- Under the "Permissions" tab of the function click "Add permission" and hit "Attach policies"
+4- Search for SSM and select "AmazonSSMReadOnlyAccess" and hit "Attach Policies"
+5- Open Systems Manager and click "Parameter Store" on the left
+6- Click "Create Parameter" and name it "api-access-url"
+7- Select Standard tier --> type string --> Data type text --> Value "123.api-access-url.amazon.com"
+8- Open Lambda and update the code like below
+
+import json
+import boto3
+
+client = boto3.client('ssm')
+response = client.get_parameter(Name='api-access-url')
+
+def lambda_handler(event, context):
+    # TODO implement
+    return {
+        'statusCode': 200,
+        'body': response['Parameter']['Value']
+    }
+
+9- This code will read the parameter value and print it in the output
